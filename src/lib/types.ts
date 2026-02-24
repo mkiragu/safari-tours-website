@@ -10,6 +10,17 @@ export interface TourPackage {
   highlights: string[]
 }
 
+export interface Vehicle {
+  id: string
+  name: string
+  type: string
+  capacity: string
+  description: string
+  features: string[]
+  imageUrl: string
+  priceRange: string
+}
+
 export interface ContactForm {
   name: string
   email: string

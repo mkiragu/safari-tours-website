@@ -10,10 +10,10 @@ export function HeroSection({ scrollToSection }: HeroSectionProps) {
       id="home"
       className="relative h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-accent/10 to-muted"
       style={{
-        backgroundImage: 'radial-gradient(circle at 20% 50%, oklch(0.68 0.19 45 / 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, oklch(0.55 0.15 50 / 0.15) 0%, transparent 50%)',
+        backgroundImage: 'radial-gradient(circle at 20% 50%, oklch(0.65 0.15 240 / 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, oklch(0.45 0.12 250 / 0.15) 0%, transparent 50%)',
       }}
     >
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,oklch(0.55_0.15_50_/_0.03)_20px,oklch(0.55_0.15_50_/_0.03)_40px)]" />
+      <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,oklch(0.45_0.12_250_/_0.03)_20px,oklch(0.45_0.12_250_/_0.03)_40px)]" />
       
       <div className="relative z-10 text-center px-6 md:px-12 max-w-4xl">
         <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">

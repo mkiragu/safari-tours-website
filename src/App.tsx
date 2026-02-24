@@ -4,6 +4,8 @@ import { Toaster } from 'sonner'
 import { Navigation } from '@/components/Navigation'
 import { HeroSection } from '@/components/HeroSection'
 import { TourCard } from '@/components/TourCard'
+import { PackagesSection } from '@/components/PackagesSection'
+import { VehiclesSection } from '@/components/VehiclesSection'
 import { AboutSection } from '@/components/AboutSection'
 import { ContactForm } from '@/components/ContactForm'
 import { Footer } from '@/components/Footer'
@@ -26,6 +28,11 @@ function App() {
 
   const handleInquire = (tourTitle: string) => {
     setSelectedTour(tourTitle)
+    scrollToSection('contact')
+  }
+
+  const handleVehicleInquire = (vehicleName: string) => {
+    setSelectedTour(`Vehicle: ${vehicleName}`)
     scrollToSection('contact')
   }
 
@@ -82,6 +89,10 @@ function App() {
             )}
           </div>
         </section>
+
+        <PackagesSection />
+
+        <VehiclesSection onInquire={handleVehicleInquire} />
 
         <AboutSection />
 

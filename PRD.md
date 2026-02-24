@@ -47,6 +47,13 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - Progression: Navigate to section → Read company information → View service highlights
 - Success criteria: Content is readable, well-organized, and professionally presented
 
+**Vehicle Fleet Section**
+- Functionality: Showcases available vehicles for safaris and transfers with specifications
+- Purpose: Demonstrates fleet quality and helps customers choose appropriate transport
+- Trigger: User scrolls to vehicles section or navigates via menu
+- Progression: Navigate to section → View vehicle cards → See capacity, features, and images
+- Success criteria: All vehicles display with clear specifications, images, and booking options
+
 ## Edge Case Handling
 
 - **Empty Tours List**: Display welcoming message encouraging admin to add first tour package
@@ -63,16 +70,16 @@ The design should evoke the natural beauty, warmth, and adventure of African saf
 
 ## Color Selection
 
-A warm, earthy palette inspired by African landscapes with vibrant accent colors reminiscent of sunset safaris.
+A sophisticated blue palette inspired by the vast African skies and pristine waters, balanced with earthy accents to maintain the safari connection.
 
-- **Primary Color**: Deep amber/burnt orange (oklch(0.55 0.15 50)) - Represents safari sunsets and adventure, used for CTAs and key interactive elements
-- **Secondary Colors**: Warm sand/tan (oklch(0.85 0.04 75)) for backgrounds; deep earth brown (oklch(0.35 0.05 45)) for secondary actions
-- **Accent Color**: Vibrant sunset orange (oklch(0.68 0.19 45)) for attention-grabbing CTAs, hover states, and important highlights
+- **Primary Color**: Deep ocean blue (oklch(0.45 0.12 250)) - Represents trust, professionalism, and the endless African skies, used for CTAs and key interactive elements
+- **Secondary Colors**: Warm sand/tan (oklch(0.88 0.03 75)) for backgrounds; slate blue (oklch(0.38 0.08 260)) for secondary actions
+- **Accent Color**: Bright sky blue (oklch(0.65 0.15 240)) for attention-grabbing CTAs, hover states, and important highlights
 - **Foreground/Background Pairings**: 
-  - Primary (Deep Amber oklch(0.55 0.15 50)): White text (oklch(1 0 0)) - Ratio 5.2:1 ✓
-  - Accent (Sunset Orange oklch(0.68 0.19 45)): White text (oklch(1 0 0)) - Ratio 7.8:1 ✓
-  - Background (Cream oklch(0.97 0.01 85)): Dark Brown text (oklch(0.25 0.02 45)) - Ratio 12.5:1 ✓
-  - Secondary (Earth Brown oklch(0.35 0.05 45)): White text (oklch(1 0 0)) - Ratio 9.1:1 ✓
+  - Primary (Deep Ocean Blue oklch(0.45 0.12 250)): White text (oklch(1 0 0)) - Ratio 8.2:1 ✓
+  - Accent (Sky Blue oklch(0.65 0.15 240)): White text (oklch(1 0 0)) - Ratio 5.5:1 ✓
+  - Background (Light Cream oklch(0.97 0.01 75)): Dark Gray text (oklch(0.25 0.01 260)) - Ratio 13.1:1 ✓
+  - Secondary (Slate Blue oklch(0.38 0.08 260)): White text (oklch(1 0 0)) - Ratio 9.8:1 ✓
 
 ## Font Selection
 
