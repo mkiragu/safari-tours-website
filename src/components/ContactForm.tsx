@@ -53,7 +53,7 @@ export function ContactForm({ prefilledTour }: ContactFormProps) {
                 </div>
                 <div>
                   <p className="font-semibold">Phone</p>
-                  <p className="text-muted-foreground">+254 123 456 789</p>
+                  <p className="text-muted-foreground">+254 724 00 22 99</p>
                 </div>
               </div>
 

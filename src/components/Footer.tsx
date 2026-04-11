@@ -26,7 +26,7 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Contact Us</h4>
             <ul className="space-y-2 text-sm opacity-90">
               <li>Email: info@jimfiresafaris.com</li>
-              <li>Phone: +254 123 456 789</li>
+              <li>Phone: +254 724 00 22 99</li>
               <li>Location: Nairobi, Kenya</li>
             </ul>
           </div>
