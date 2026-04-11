@@ -63,7 +63,7 @@ export function ContactForm({ prefilledTour }: ContactFormProps) {
                 </div>
                 <div>
                   <p className="font-semibold">Email</p>
-                  <p className="text-muted-foreground">info@jimfiresafaris.com</p>
+                  <p className="text-muted-foreground">jimfiresafarisandtransfers@gmail.com</p>
                 </div>
               </div>
 
