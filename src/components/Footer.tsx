@@ -25,7 +25,7 @@ export function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Contact Us</h4>
             <ul className="space-y-2 text-sm opacity-90">
-              <li>Email: jimfiresafarisandtransfers@gmail.com</li>
+              <li>Email: info@jimfiresafarisandtransfers.com</li>
               <li>Phone: +254 724 00 22 99</li>
               <li>Location: Nairobi, Kenya</li>
             </ul>
