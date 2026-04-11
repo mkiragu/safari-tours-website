@@ -4,105 +4,155 @@ import type { Vehicle } from '@/lib/types'
 const vehicles: Vehicle[] = [
   {
     id: '1',
-    name: 'Toyota Land Cruiser',
-    type: '4x4 Safari Vehicle',
+    name: 'Executive Open Game Viewer 4X4 Safari Land Cruiser',
+    type: 'Best for Photography',
     capacity: 'Up to 7 passengers',
-    description: 'The ultimate safari experience with our flagship Toyota Land Cruiser, equipped with pop-up roof for optimal game viewing.',
+    description: 'Our premium safari vehicle designed specifically for wildlife photography enthusiasts. Features an extended open roof and reinforced stability for the perfect shot.',
     features: [
-      'Pop-up roof for photography',
+      'Extended open roof for 360° photography',
+      'Stabilized platform for camera equipment',
+      'Individual window seats with swivel capability',
+      'Premium suspension for smooth rides',
+      'Charging stations for camera batteries',
+      'Professional wildlife guide',
+      'Communication radio system',
+      'Cooler box & refreshments'
+    ],
+    imageUrl: '',
+    priceRange: 'Executive'
+  },
+  {
+    id: '2',
+    name: 'Open Roof 4X4 Safari Land Cruiser',
+    type: '4X4 Safari Vehicle',
+    capacity: 'Up to 7 passengers',
+    description: 'The classic safari experience with our flagship Land Cruiser, equipped with open pop-up roof for optimal game viewing and photography.',
+    features: [
+      'Pop-up open roof for game viewing',
       'Air conditioning',
       'Spacious interior with charging ports',
+      'All-terrain 4X4 capability',
       'Experienced driver-guide',
-      'First aid kit & fire extinguisher',
-      'Communication radio'
+      'First aid kit & safety equipment',
+      'Communication radio',
+      'Window seats for all passengers'
     ],
     imageUrl: '',
     priceRange: 'Premium'
   },
   {
-    id: '2',
-    name: 'Safari Minivan',
+    id: '3',
+    name: 'Standard Open Roof Safari Van',
     type: 'Extended Safari Van',
     capacity: 'Up to 9 passengers',
-    description: 'Perfect for group safaris with extended roof hatches allowing everyone excellent wildlife viewing opportunities.',
+    description: 'Perfect for group safaris with extended roof hatches allowing everyone excellent wildlife viewing opportunities at an affordable price.',
     features: [
       'Extended pop-up roof',
       'Climate control system',
       'Individual window seats',
       'Extra luggage space',
       'Cooler box for refreshments',
-      'Professional safari guide'
+      'Professional safari guide',
+      'USB charging ports',
+      'Comfortable seating'
     ],
     imageUrl: '',
     priceRange: 'Standard'
   },
   {
-    id: '3',
-    name: 'Land Cruiser Prado',
-    type: '4x4 Luxury SUV',
+    id: '4',
+    name: 'Unique Open Roof Safari Mini-Van',
+    type: 'Compact Safari Vehicle',
+    capacity: 'Up to 6 passengers',
+    description: 'Perfectly sized for small groups or families, offering an intimate safari experience with all the essential features for game viewing.',
+    features: [
+      'Open pop-up roof',
+      'Compact & maneuverable',
+      'Air conditioning',
+      'Personal space for each guest',
+      'Large windows for viewing',
+      'Expert driver-guide',
+      'Safety equipment',
+      'Luggage storage'
+    ],
+    imageUrl: '',
+    priceRange: 'Standard'
+  },
+  {
+    id: '5',
+    name: '4X4 Jeep Prado',
+    type: '4X4 Luxury SUV',
     capacity: 'Up to 5 passengers',
-    description: 'Premium comfort for smaller groups or families, combining luxury with excellent off-road capabilities.',
+    description: 'Premium comfort for smaller groups or families, combining luxury with excellent off-road capabilities for exclusive safari experiences.',
     features: [
       'Leather interior',
       'Advanced 4WD system',
       'Premium sound system',
-      'Climate zones',
-      'Panoramic viewing',
-      'VIP service'
+      'Dual climate zones',
+      'Panoramic viewing windows',
+      'VIP guide service',
+      'Privacy glass',
+      'Luxury amenities'
     ],
     imageUrl: '',
     priceRange: 'Luxury'
   },
   {
-    id: '4',
-    name: 'Airport Transfer Sedan',
-    type: 'Executive Car',
-    capacity: 'Up to 4 passengers',
-    description: 'Comfortable and reliable airport transfers with professional chauffeur service.',
+    id: '6',
+    name: 'Executive 6 Seater Alphard Transfer Van',
+    type: 'Executive Transfer Vehicle',
+    capacity: '6 passengers',
+    description: 'Ultimate luxury for airport transfers and city transport. The Alphard offers executive comfort with premium amenities for discerning travelers.',
     features: [
+      'Executive leather seating',
+      'Captain seats with leg rests',
+      'Climate control system',
+      'Entertainment system',
+      'Complimentary WiFi',
       'Meet & greet service',
       'Flight tracking',
-      'Complimentary WiFi',
-      'Bottled water',
-      'Professional chauffeur',
-      'Luggage assistance'
+      'Premium chauffeur service'
     ],
     imageUrl: '',
-    priceRange: 'Economy'
+    priceRange: 'Executive'
   },
   {
-    id: '5',
-    name: 'Coaster Bus',
+    id: '7',
+    name: 'Coaster',
     type: 'Group Transport',
     capacity: 'Up to 25 passengers',
-    description: 'Ideal for large groups, school trips, or corporate events with comfortable seating and ample space.',
+    description: 'Ideal for large groups, school trips, corporate events, or team-building safaris with comfortable seating and ample luggage space.',
     features: [
       'Reclining seats',
       'PA system',
       'Large luggage capacity',
       'Air conditioning',
       'Experienced driver',
-      'Safety equipment'
+      'Safety equipment',
+      'USB charging ports',
+      'Spacious aisle'
     ],
     imageUrl: '',
     priceRange: 'Group Rate'
   },
   {
-    id: '6',
-    name: 'Safari Jeep',
-    type: 'Classic Safari 4x4',
-    capacity: 'Up to 6 passengers',
-    description: 'The classic safari experience with open-air viewing and rugged reliability.',
+    id: '8',
+    name: 'Sedans',
+    type: 'Executive Car',
+    capacity: 'Up to 4 passengers',
+    description: 'Comfortable and reliable sedans for airport transfers, business meetings, or city tours with professional chauffeur service.',
     features: [
-      'Open-top design',
-      'High ground clearance',
-      'Off-road tires',
-      'Safety roll bars',
-      'Binoculars provided',
-      'Expert guide'
+      'Meet & greet service',
+      'Flight tracking',
+      'Complimentary WiFi',
+      'Bottled water',
+      'Professional chauffeur',
+      'Luggage assistance',
+      'Air conditioning',
+      'GPS navigation'
     ],
     imageUrl: '',
-    priceRange: 'Standard'
+    priceRange: 'Economy'
   }
 ]
 
