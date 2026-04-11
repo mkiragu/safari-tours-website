@@ -50,6 +50,12 @@ export function Navigation({ onLoginClick, scrollToSection }: NavigationProps) {
               Vehicles
             </button>
             <button
+              onClick={() => scrollToSection('testimonials')}
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Reviews
+            </button>
+            <button
               onClick={() => scrollToSection('about')}
               className="text-foreground hover:text-primary transition-colors"
             >

@@ -54,13 +54,31 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - Progression: Navigate to section → View vehicle cards → See capacity, features, and images
 - Success criteria: All vehicles display with clear specifications, images, and booking options
 
+**Testimonials & Reviews Section**
+- Functionality: Displays customer testimonials with ratings, comments, and verification badges
+- Purpose: Builds trust and credibility through authentic customer experiences
+- Trigger: User scrolls to testimonials section or clicks Reviews in navigation
+- Progression: Navigate to section → View testimonial cards with star ratings → Read customer feedback → See verified badges
+- Success criteria: Testimonials display with 5-star ratings, customer names, locations, tour taken, dates, and verification status; average rating calculated dynamically
+
+**Testimonials Management (Admin)**
+- Functionality: Create, edit, and delete customer testimonials
+- Purpose: Enables site owner to manage and moderate customer reviews
+- Trigger: Admin accesses dashboard and switches to Testimonials tab
+- Progression: Login → Dashboard → Testimonials tab → Add/Edit testimonials → Fill form (name, location, rating, comment, tour, date, verification) → Save → Update display
+- Success criteria: All CRUD operations work correctly; verified badge toggles properly; changes immediately reflect on public site; form validation prevents invalid data
+
 ## Edge Case Handling
 
 - **Empty Tours List**: Display welcoming message encouraging admin to add first tour package
+- **Empty Testimonials List**: Section hidden when no testimonials exist; admin sees prompt to add first review
 - **Invalid Login**: Show clear error message without revealing whether username or password was incorrect
 - **Form Validation**: Prevent submission with incomplete fields; highlight errors inline
+- **Rating Validation**: Ensure testimonial ratings are between 1-5 stars
 - **Long Tour Descriptions**: Truncate or use expand/collapse for lengthy content on cards
+- **Long Testimonial Comments**: Truncate with line-clamp on cards, full text visible in admin panel
 - **Missing Images**: Display placeholder graphics when tour images aren't provided
+- **Missing Avatars**: Generate initials-based avatar fallback for testimonials without photos
 - **Simultaneous Edits**: Last save wins (acceptable for single-admin scenario)
 - **Network Errors**: Display toast notifications when operations fail
 
@@ -104,17 +122,19 @@ Animations should enhance the sense of discovery and adventure while maintaining
   - `Input`, `Textarea` - Contact form and admin package management
   - `Dialog` - Admin login modal and package edit forms
   - `Form` (react-hook-form) - Validation for contact and admin forms
-  - `Tabs` - Organize different tour categories if needed
+  - `Tabs` - Organize admin dashboard sections (Tours, Testimonials)
   - `Alert` - Display important notices to admins
   - `Separator` - Visual breaks between sections
   - `ScrollArea` - Tour description overflow handling
-  - `Badge` - Tour duration, difficulty, or featured tags
+  - `Badge` - Tour duration, difficulty, or featured tags; verified customer badges
   - `Toast` (sonner) - Feedback for form submissions and admin actions
-  - `Avatar` - Potential use for testimonials or guide profiles
+  - `Avatar` - Customer profile images in testimonials with initials fallback
+  - `Switch` - Toggle featured tours and verified testimonials
   
 - **Customizations**:
   - Custom hero section with full-width background image and overlay
   - Tour card with image, gradient overlay for text readability
+  - Testimonial card with star rating display, verification badge, and customer avatar
   - Sticky navigation bar that changes background on scroll
   - Custom footer with multi-column layout for links and contact info
   
@@ -128,11 +148,12 @@ Animations should enhance the sense of discovery and adventure while maintaining
   - `MapPin` - Location indicators
   - `Calendar` - Tour duration
   - `Users` - Group size information
-  - `Star` - Featured/recommended tours
+  - `Star` - Featured/recommended tours, testimonial ratings
+  - `Seal` - Verified testimonial badge
   - `Phone`, `Envelope` - Contact methods
-  - `PencilSimple` - Edit tour packages
-  - `Trash` - Delete packages
-  - `Plus` - Add new package
+  - `PencilSimple` - Edit tour packages and testimonials
+  - `Trash` - Delete packages and testimonials
+  - `Plus` - Add new package or testimonial
   - `SignOut` - Admin logout
   - `Lock` - Login/security
   
@@ -145,6 +166,8 @@ Animations should enhance the sense of discovery and adventure while maintaining
 - **Mobile**:
   - Navigation collapses to hamburger menu below 768px
   - Tour cards stack vertically on mobile, 2-column grid on tablet, 3-column on desktop
+  - Testimonial cards stack vertically on mobile, 2-column grid on tablet, 3-column on desktop
   - Hero text sizes reduce proportionally on smaller screens
   - Admin dashboard table becomes scrollable cards on mobile
+  - Admin tabs remain accessible with touch-friendly sizing
   - Form inputs stack vertically with full width on mobile

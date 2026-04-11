@@ -28,3 +28,15 @@ export interface ContactForm {
   message: string
   tourInterest?: string
 }
+
+export interface Testimonial {
+  id: string
+  name: string
+  location: string
+  rating: number
+  comment: string
+  tourTaken: string
+  date: string
+  avatar?: string
+  verified: boolean
+}

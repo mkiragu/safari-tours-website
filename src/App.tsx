@@ -7,6 +7,7 @@ import { TourCard } from '@/components/TourCard'
 import { PackagesSection } from '@/components/PackagesSection'
 import { VehiclesSection } from '@/components/VehiclesSection'
 import { AboutSection } from '@/components/AboutSection'
+import { TestimonialsSection } from '@/components/TestimonialsSection'
 import { ContactForm } from '@/components/ContactForm'
 import { Footer } from '@/components/Footer'
 import { LoginDialog } from '@/components/LoginDialog'
@@ -93,6 +94,8 @@ function App() {
         <PackagesSection />
 
         <VehiclesSection onInquire={handleVehicleInquire} />
+
+        <TestimonialsSection />
 
         <AboutSection />
 
