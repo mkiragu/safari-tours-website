@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Lock } from '@phosphor-icons/react'
+import { JimfireLogo } from '@/components/JimfireLogo'
 
 interface NavigationProps {
   onLoginClick: () => void
@@ -26,9 +27,12 @@ export function Navigation({ onLoginClick, scrollToSection }: NavigationProps) {
     >
       <div className="container mx-auto px-6 md:px-12 lg:px-24 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-primary">
-            Jimfire Safaris
-          </div>
+          <button 
+            onClick={() => scrollToSection('home')}
+            className="transition-transform hover:scale-105"
+          >
+            <JimfireLogo />
+          </button>
           
           <div className="hidden md:flex items-center gap-8">
             <button

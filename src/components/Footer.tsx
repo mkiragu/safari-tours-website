@@ -1,10 +1,12 @@
+import { JimfireLogo } from '@/components/JimfireLogo'
+
 export function Footer() {
   return (
     <footer className="bg-secondary text-secondary-foreground py-12">
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Jimfire Safaris & Transfers</h3>
+            <JimfireLogo variant="light" className="mb-4" />
             <p className="text-sm opacity-90">
               Creating unforgettable safari experiences across East Africa since our founding.
             </p>
