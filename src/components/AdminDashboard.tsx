@@ -11,7 +11,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from 'sonner'
-import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal, UploadSimple, Gear } from '@phosphor-icons/react'
+import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal, UploadSimple, Gear, Image as ImageIcon, X } from '@phosphor-icons/react'
+import { resizeImage, validateImageFile } from '@/lib/imageUtils'
 import type { TourPackage, Testimonial } from '@/lib/types'
 
 interface AdminDashboardProps {
@@ -27,7 +28,10 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [isTourDialogOpen, setIsTourDialogOpen] = useState(false)
   const [isTestimonialDialogOpen, setIsTestimonialDialogOpen] = useState(false)
   const [logoPreview, setLogoPreview] = useState<string>(logoUrl || '')
+  const [tourImagePreview, setTourImagePreview] = useState<string>('')
+  const [isUploadingTourImage, setIsUploadingTourImage] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const tourImageInputRef = useRef<HTMLInputElement>(null)
   
   const { register: registerTour, handleSubmit: handleSubmitTour, reset: resetTour, setValue: setValueTour, watch: watchTour, formState: { errors: errorsTour } } = useForm<TourPackage>()
   const { register: registerTestimonial, handleSubmit: handleSubmitTestimonial, reset: resetTestimonial, setValue: setValueTestimonial, watch: watchTestimonial, formState: { errors: errorsTestimonial } } = useForm<Testimonial>()
@@ -49,12 +53,14 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
       highlights: [],
     })
     setEditingTour(null)
+    setTourImagePreview('')
     setIsTourDialogOpen(true)
   }
 
   const handleEditTour = (tour: TourPackage) => {
     setEditingTour(tour)
     resetTour(tour)
+    setTourImagePreview(tour.imageUrl || '')
     setIsTourDialogOpen(true)
   }
 
@@ -180,6 +186,44 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     }
   }
 
+  const handleTourImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validation = validateImageFile(file)
+    if (!validation.valid) {
+      toast.error(validation.error)
+      return
+    }
+
+    setIsUploadingTourImage(true)
+
+    try {
+      const resizedImage = await resizeImage(file, {
+        maxWidth: 1200,
+        maxHeight: 800,
+        quality: 0.85
+      })
+      
+      setTourImagePreview(resizedImage)
+      setValueTour('imageUrl', resizedImage)
+      toast.success('Image uploaded and resized successfully')
+    } catch (error) {
+      toast.error('Failed to process image. Please try again.')
+      console.error(error)
+    } finally {
+      setIsUploadingTourImage(false)
+    }
+  }
+
+  const handleRemoveTourImage = () => {
+    setTourImagePreview('')
+    setValueTour('imageUrl', '')
+    if (tourImageInputRef.current) {
+      tourImageInputRef.current.value = ''
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b bg-card">
@@ -230,6 +274,15 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {tours.map((tour) => (
                   <Card key={tour.id}>
+                    {tour.imageUrl && (
+                      <div className="relative h-48 overflow-hidden bg-muted">
+                        <img
+                          src={tour.imageUrl}
+                          alt={tour.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
                     <CardHeader>
                       <CardTitle className="flex items-start justify-between">
                         <span className="line-clamp-1">{tour.title}</span>
@@ -553,12 +606,57 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               </div>
 
               <div>
-                <Label htmlFor="imageUrl">Image URL</Label>
-                <Input
-                  id="imageUrl"
-                  {...registerTour('imageUrl')}
-                  placeholder="https://example.com/image.jpg"
-                />
+                <Label htmlFor="imageUrl">Tour Image</Label>
+                <div className="space-y-4">
+                  {tourImagePreview && (
+                    <div className="relative border-2 border-border rounded-lg overflow-hidden bg-muted/20">
+                      <img
+                        src={tourImagePreview}
+                        alt="Tour preview"
+                        className="w-full h-64 object-cover"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={handleRemoveTourImage}
+                      >
+                        <X />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <input
+                      id="tour-image-upload"
+                      ref={tourImageInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleTourImageUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => tourImageInputRef.current?.click()}
+                      disabled={isUploadingTourImage}
+                    >
+                      {isUploadingTourImage ? (
+                        <>Processing...</>
+                      ) : (
+                        <>
+                          <ImageIcon className="mr-2" />
+                          {tourImagePreview ? 'Change Image' : 'Upload Image'}
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Images will be automatically resized to 1200x800px while maintaining aspect ratio. Max 10MB.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div>
