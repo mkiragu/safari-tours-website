@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from 'sonner'
-import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal } from '@phosphor-icons/react'
+import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal, UploadSimple, Gear } from '@phosphor-icons/react'
 import type { TourPackage, Testimonial } from '@/lib/types'
 
 interface AdminDashboardProps {
@@ -21,13 +21,20 @@ interface AdminDashboardProps {
 export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [tours, setTours] = useKV<TourPackage[]>('tour-packages', [])
   const [testimonials, setTestimonials] = useKV<Testimonial[]>('testimonials', [])
+  const [logoUrl, setLogoUrl] = useKV<string>('company-logo', '')
   const [editingTour, setEditingTour] = useState<TourPackage | null>(null)
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
   const [isTourDialogOpen, setIsTourDialogOpen] = useState(false)
   const [isTestimonialDialogOpen, setIsTestimonialDialogOpen] = useState(false)
+  const [logoPreview, setLogoPreview] = useState<string>(logoUrl || '')
+  const fileInputRef = useRef<HTMLInputElement>(null)
   
   const { register: registerTour, handleSubmit: handleSubmitTour, reset: resetTour, setValue: setValueTour, watch: watchTour, formState: { errors: errorsTour } } = useForm<TourPackage>()
   const { register: registerTestimonial, handleSubmit: handleSubmitTestimonial, reset: resetTestimonial, setValue: setValueTestimonial, watch: watchTestimonial, formState: { errors: errorsTestimonial } } = useForm<Testimonial>()
+
+  useEffect(() => {
+    setLogoPreview(logoUrl || '')
+  }, [logoUrl])
 
   const handleAddTour = () => {
     resetTour({
@@ -138,6 +145,41 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     resetTestimonial()
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const base64String = reader.result as string
+      setLogoPreview(base64String)
+      setLogoUrl(base64String)
+      toast.success('Logo uploaded successfully')
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveLogo = () => {
+    if (confirm('Are you sure you want to remove the custom logo?')) {
+      setLogoUrl('')
+      setLogoPreview('')
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+      toast.success('Logo removed')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b bg-card">
@@ -163,9 +205,10 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
       <div className="container mx-auto px-6 md:px-12 lg:px-24 py-8">
         <Tabs defaultValue="tours" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 mb-8">
             <TabsTrigger value="tours">Tour Packages</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
           <TabsContent value="tours">
@@ -302,6 +345,130 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-6">Company Settings</h2>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Gear />
+                    Company Logo
+                  </CardTitle>
+                  <CardDescription>
+                    Upload a custom logo to replace the default Jimfire Safaris logo
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label htmlFor="logo-upload" className="mb-3 block">
+                      Current Logo
+                    </Label>
+                    <div className="border-2 border-dashed border-border rounded-lg p-8 bg-muted/20">
+                      {logoPreview || logoUrl ? (
+                        <div className="flex flex-col items-center gap-4">
+                          <img
+                            src={logoPreview || logoUrl}
+                            alt="Company Logo"
+                            className="max-w-full max-h-48 object-contain"
+                          />
+                          <p className="text-sm text-muted-foreground">
+                            Custom logo uploaded
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-4">
+                          <div className="bg-card p-4 rounded-lg">
+                            <svg
+                              width="80"
+                              height="80"
+                              viewBox="0 0 40 40"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle cx="20" cy="20" r="19" fill="#6B7FD7" fillOpacity="0.15" />
+                              <path
+                                d="M20 8C18.5 8 17.5 9 17 10.5C16.8 11 16.5 12 16.5 13C16.5 14 16.8 15 17.5 16C18 16.8 19 17.5 20 18C21 17.5 22 16.8 22.5 16C23.2 15 23.5 14 23.5 13C23.5 12 23.2 11 23 10.5C22.5 9 21.5 8 20 8Z"
+                                fill="#6B7FD7"
+                              />
+                              <path
+                                d="M13 14C12 14.5 11.5 15.5 11.5 16.5C11.5 17.5 12 18.5 13 19L15 20.5C16 21 17 21 18 20.5C18.5 20.2 19 19.5 19 18.5C19 17.5 18.5 16.5 18 16L16 14.5C15 14 14 14 13 14Z"
+                                fill="#6B7FD7"
+                                fillOpacity="0.8"
+                              />
+                              <path
+                                d="M27 14C26 14 25 14 24 14.5L22 16C21.5 16.5 21 17.5 21 18.5C21 19.5 21.5 20.2 22 20.5C23 21 24 21 25 20.5L27 19C28 18.5 28.5 17.5 28.5 16.5C28.5 15.5 28 14.5 27 14Z"
+                                fill="#6B7FD7"
+                                fillOpacity="0.8"
+                              />
+                              <ellipse cx="20" cy="24" rx="10" ry="3" fill="#6B7FD7" fillOpacity="0.2" />
+                              <path
+                                d="M12 22C11 22.5 10 23.5 10 25C10 26.5 11 28 12 29L14 30.5C15.5 31.5 17 32 18.5 31.5C19.5 31.2 20.5 30 20.5 28.5C20.5 27 20 25.5 19 24.5L17 23C15.5 22 13.5 21.5 12 22Z"
+                                fill="#6B7FD7"
+                              />
+                              <path
+                                d="M28 22C26.5 21.5 24.5 22 23 23L21 24.5C20 25.5 19.5 27 19.5 28.5C19.5 30 20.5 31.2 21.5 31.5C23 32 24.5 31.5 26 30.5L28 29C29 28 30 26.5 30 25C30 23.5 29 22.5 28 22Z"
+                                fill="#6B7FD7"
+                              />
+                            </svg>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Default Jimfire Safaris logo
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="logo-upload" className="cursor-pointer">
+                        <input
+                          id="logo-upload"
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="hidden"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <UploadSimple className="mr-2" />
+                          Choose Logo Image
+                        </Button>
+                      </Label>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Supported formats: JPG, PNG, SVG, GIF (Max 5MB)
+                      </p>
+                    </div>
+
+                    {(logoPreview || logoUrl) && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full text-destructive hover:text-destructive"
+                        onClick={handleRemoveLogo}
+                      >
+                        <Trash className="mr-2" />
+                        Remove Custom Logo
+                      </Button>
+                    )}
+                  </div>
+
+                  <Alert>
+                    <AlertDescription>
+                      The logo will be displayed in the navigation bar and footer. For best results, use a transparent PNG with a width of at least 200px.
+                    </AlertDescription>
+                  </Alert>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
 

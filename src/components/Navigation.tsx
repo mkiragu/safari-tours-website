@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
 import { Lock } from '@phosphor-icons/react'
 import { JimfireLogo } from '@/components/JimfireLogo'
@@ -10,6 +11,7 @@ interface NavigationProps {
 
 export function Navigation({ onLoginClick, scrollToSection }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [logoUrl] = useKV<string>('company-logo', '')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +33,7 @@ export function Navigation({ onLoginClick, scrollToSection }: NavigationProps) {
             onClick={() => scrollToSection('home')}
             className="transition-transform hover:scale-105"
           >
-            <JimfireLogo />
+            <JimfireLogo customLogoUrl={logoUrl} />
           </button>
           
           <div className="hidden md:flex items-center gap-8">

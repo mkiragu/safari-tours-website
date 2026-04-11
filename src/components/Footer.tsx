@@ -1,12 +1,15 @@
+import { useKV } from '@github/spark/hooks'
 import { JimfireLogo } from '@/components/JimfireLogo'
 
 export function Footer() {
+  const [logoUrl] = useKV<string>('company-logo', '')
+
   return (
     <footer className="bg-secondary text-secondary-foreground py-12">
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <JimfireLogo variant="light" className="mb-4" />
+            <JimfireLogo variant="light" className="mb-4" customLogoUrl={logoUrl} />
             <p className="text-sm opacity-90">
               Creating unforgettable safari experiences across East Africa since our founding.
             </p>

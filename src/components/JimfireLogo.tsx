@@ -1,11 +1,24 @@
 interface JimfireLogoProps {
   className?: string
   variant?: 'default' | 'light'
+  customLogoUrl?: string
 }
 
-export function JimfireLogo({ className = '', variant = 'default' }: JimfireLogoProps) {
+export function JimfireLogo({ className = '', variant = 'default', customLogoUrl }: JimfireLogoProps) {
   const accentColor = variant === 'light' ? '#ffffff' : '#6B7FD7'
   const textColor = variant === 'light' ? '#ffffff' : '#404040'
+
+  if (customLogoUrl) {
+    return (
+      <div className={`flex items-center ${className}`}>
+        <img
+          src={customLogoUrl}
+          alt="Company Logo"
+          className="h-10 md:h-12 w-auto object-contain"
+        />
+      </div>
+    )
+  }
   
   return (
     <div className={`flex items-center gap-3 ${className}`}>
