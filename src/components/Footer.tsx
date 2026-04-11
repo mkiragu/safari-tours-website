@@ -4,7 +4,7 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Jim Fire Safaris & Transfers</h3>
+            <h3 className="text-xl font-bold mb-4">Jimfire Safaris & Transfers</h3>
             <p className="text-sm opacity-90">
               Creating unforgettable safari experiences across East Africa since our founding.
             </p>
@@ -31,7 +31,7 @@ export function Footer() {
         </div>
         
         <div className="mt-8 pt-8 border-t border-secondary-foreground/20 text-center text-sm opacity-75">
-          <p>&copy; {new Date().getFullYear()} Jim Fire Safaris & Transfers. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Jimfire Safaris & Transfers. All rights reserved.</p>
         </div>
       </div>
     </footer>

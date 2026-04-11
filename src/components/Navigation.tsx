@@ -27,7 +27,7 @@ export function Navigation({ onLoginClick, scrollToSection }: NavigationProps) {
       <div className="container mx-auto px-6 md:px-12 lg:px-24 py-4">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-primary">
-            Jim Fire Safaris
+            Jimfire Safaris
           </div>
           
           <div className="hidden md:flex items-center gap-8">

@@ -5,7 +5,7 @@ export function AboutSection() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              About Jim Fire Safaris
+              About Jimfire Safaris
             </h2>
             <p className="text-xl text-muted-foreground">
               Your trusted partner for unforgettable African adventures
@@ -16,7 +16,7 @@ export function AboutSection() {
             <div>
               <h3 className="text-2xl font-semibold mb-4">Our Mission</h3>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                At Jim Fire Safaris & Transfers, we specialize in creating authentic safari experiences 
+                At Jimfire Safaris & Transfers, we specialize in creating authentic safari experiences 
                 that showcase the breathtaking beauty and wildlife of Kenya and East Africa. With years 
                 of expertise and a passion for conservation, we bring you closer to nature while ensuring 
                 comfort, safety, and unforgettable memories.
