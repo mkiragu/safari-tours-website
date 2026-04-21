@@ -1,0 +1,11 @@
+# robots.txt for Jimfire Safaris & Transfers
+# This file tells search engines how to crawl your site
+
+User-agent: *
+Allow: /
+
+# Disallow admin routes (if you add them later)
+Disallow: /admin
+
+# Sitemap location (create sitemap.xml if needed)
+# Sitemap: https://yourdomain.com/sitemap.xml
