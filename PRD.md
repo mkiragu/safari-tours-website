@@ -68,6 +68,13 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - Progression: Login → Dashboard → Testimonials tab → Add/Edit testimonials → Fill form (name, location, rating, comment, tour, date, verification) → Save → Update display
 - Success criteria: All CRUD operations work correctly; verified badge toggles properly; changes immediately reflect on public site; form validation prevents invalid data
 
+**Direct Payment Processing**
+- Functionality: Accept credit card and M-Pesa payments directly on the website for tour bookings
+- Purpose: Streamlines the booking process and provides convenient payment options for customers
+- Trigger: User clicks "Book Now" button on any tour card
+- Progression: Click Book Now → Payment dialog opens → Choose payment method (Credit Card or M-Pesa) → Fill payment details → Submit payment → Confirmation message → Email receipt
+- Success criteria: Both payment methods work correctly; form validation prevents invalid payment details; secure SSL encryption indicated; success confirmation displayed; payment information logged for admin review
+
 ## Edge Case Handling
 
 - **Empty Tours List**: Display welcoming message encouraging admin to add first tour package
@@ -81,6 +88,11 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - **Missing Avatars**: Generate initials-based avatar fallback for testimonials without photos
 - **Simultaneous Edits**: Last save wins (acceptable for single-admin scenario)
 - **Network Errors**: Display toast notifications when operations fail
+- **Payment Processing Failures**: Show clear error messages; allow user to retry payment
+- **Invalid Card Details**: Validate card number format, expiry date, and CVV before submission
+- **Invalid M-Pesa Number**: Validate Kenyan phone number format (254XXXXXXXXX)
+- **Payment Timeout**: Show timeout message if M-Pesa prompt not completed within reasonable time
+- **Double Payment Prevention**: Disable payment buttons during processing to prevent duplicate charges
 
 ## Design Direction
 
@@ -119,15 +131,15 @@ Animations should enhance the sense of discovery and adventure while maintaining
 - **Components**:
   - `Card` - Tour package displays with shadow and hover effects
   - `Button` - CTAs throughout site, varying sizes for hierarchy
-  - `Input`, `Textarea` - Contact form and admin package management
-  - `Dialog` - Admin login modal and package edit forms
-  - `Form` (react-hook-form) - Validation for contact and admin forms
-  - `Tabs` - Organize admin dashboard sections (Tours, Testimonials)
+  - `Input`, `Textarea` - Contact form, admin package management, and payment forms
+  - `Dialog` - Admin login modal, package edit forms, and payment processing
+  - `Form` (react-hook-form) - Validation for contact, admin, and payment forms
+  - `Tabs` - Organize admin dashboard sections (Tours, Testimonials) and payment methods (Card, M-Pesa)
   - `Alert` - Display important notices to admins
-  - `Separator` - Visual breaks between sections
+  - `Separator` - Visual breaks between sections and in payment dialog
   - `ScrollArea` - Tour description overflow handling
   - `Badge` - Tour duration, difficulty, or featured tags; verified customer badges
-  - `Toast` (sonner) - Feedback for form submissions and admin actions
+  - `Toast` (sonner) - Feedback for form submissions, admin actions, and payment confirmations
   - `Avatar` - Customer profile images in testimonials with initials fallback
   - `Switch` - Toggle featured tours and verified testimonials
   
@@ -156,6 +168,9 @@ Animations should enhance the sense of discovery and adventure while maintaining
   - `Plus` - Add new package or testimonial
   - `SignOut` - Admin logout
   - `Lock` - Login/security
+  - `CreditCard` - Credit card payment method
+  - `DeviceMobile` - M-Pesa payment method
+  - `CheckCircle` - Payment success confirmation
   
 - **Spacing**:
   - Page padding: px-6 md:px-12 lg:px-24

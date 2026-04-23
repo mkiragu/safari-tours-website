@@ -12,12 +12,15 @@ import { ContactForm } from '@/components/ContactForm'
 import { Footer } from '@/components/Footer'
 import { LoginDialog } from '@/components/LoginDialog'
 import { AdminDashboard } from '@/components/AdminDashboard'
+import { PaymentDialog } from '@/components/PaymentDialog'
 import type { TourPackage } from '@/lib/types'
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [selectedTour, setSelectedTour] = useState('')
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const [tourToBook, setTourToBook] = useState<TourPackage | null>(null)
   const [tours] = useKV<TourPackage[]>('tour-packages', [])
 
   const scrollToSection = (id: string) => {
@@ -35,6 +38,11 @@ function App() {
   const handleVehicleInquire = (vehicleName: string) => {
     setSelectedTour(`Vehicle: ${vehicleName}`)
     scrollToSection('contact')
+  }
+
+  const handleBookNow = (tour: TourPackage) => {
+    setTourToBook(tour)
+    setIsPaymentOpen(true)
   }
 
   const handleLogout = () => {
@@ -84,6 +92,7 @@ function App() {
                     key={tour.id} 
                     tour={tour} 
                     onInquire={handleInquire}
+                    onBookNow={handleBookNow}
                   />
                 ))}
               </div>
@@ -107,6 +116,12 @@ function App() {
           open={isLoginOpen}
           onOpenChange={setIsLoginOpen}
           onLoginSuccess={() => setIsLoggedIn(true)}
+        />
+
+        <PaymentDialog
+          open={isPaymentOpen}
+          onOpenChange={setIsPaymentOpen}
+          tour={tourToBook}
         />
       </div>
       

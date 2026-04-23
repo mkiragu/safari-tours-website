@@ -7,9 +7,10 @@ import type { TourPackage } from '@/lib/types'
 interface TourCardProps {
   tour: TourPackage
   onInquire: (tourTitle: string) => void
+  onBookNow: (tour: TourPackage) => void
 }
 
-export function TourCard({ tour, onInquire }: TourCardProps) {
+export function TourCard({ tour, onInquire, onBookNow }: TourCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
       <div className="relative h-64 overflow-hidden bg-muted">
@@ -65,17 +66,28 @@ export function TourCard({ tour, onInquire }: TourCardProps) {
         )}
       </CardContent>
       
-      <CardFooter className="flex items-center justify-between pt-4 border-t">
-        <div>
-          <p className="text-sm text-muted-foreground">From</p>
-          <p className="text-2xl font-bold text-primary">${tour.price}</p>
+      <CardFooter className="flex flex-col gap-3 pt-4 border-t">
+        <div className="flex items-center justify-between w-full">
+          <div>
+            <p className="text-sm text-muted-foreground">From</p>
+            <p className="text-2xl font-bold text-primary">${tour.price}</p>
+          </div>
         </div>
-        <Button
-          className="bg-accent hover:bg-accent/90"
-          onClick={() => onInquire(tour.title)}
-        >
-          Inquire Now
-        </Button>
+        <div className="flex gap-2 w-full">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => onInquire(tour.title)}
+          >
+            Inquire
+          </Button>
+          <Button
+            className="flex-1 bg-accent hover:bg-accent/90"
+            onClick={() => onBookNow(tour)}
+          >
+            Book Now
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   )
