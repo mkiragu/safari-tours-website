@@ -10,10 +10,24 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal, UploadSimple, Gear, Image as ImageIcon, X } from '@phosphor-icons/react'
+import { PencilSimple, Trash, Plus, SignOut, ArrowLeft, Star, Seal, UploadSimple, Gear, Image as ImageIcon, X, CreditCard, DeviceMobile, CheckCircle, XCircle, Clock } from '@phosphor-icons/react'
 import { resizeImage, validateImageFile } from '@/lib/imageUtils'
 import type { TourPackage, Testimonial } from '@/lib/types'
+
+interface PaymentTransaction {
+  id: string
+  tourId: string
+  tourTitle: string
+  amount: number
+  paymentMethod: 'card' | 'mpesa'
+  status: 'pending' | 'completed' | 'failed'
+  transactionId?: string
+  customerEmail: string
+  customerPhone: string
+  timestamp: number
+}
 
 interface AdminDashboardProps {
   onLogout: () => void
@@ -22,6 +36,7 @@ interface AdminDashboardProps {
 export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [tours, setTours] = useKV<TourPackage[]>('tour-packages', [])
   const [testimonials, setTestimonials] = useKV<Testimonial[]>('testimonials', [])
+  const [payments] = useKV<PaymentTransaction[]>('payment-transactions', [])
   const [logoUrl, setLogoUrl] = useKV<string>('company-logo', '')
   const [editingTour, setEditingTour] = useState<TourPackage | null>(null)
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
@@ -249,8 +264,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
       <div className="container mx-auto px-6 md:px-12 lg:px-24 py-8">
         <Tabs defaultValue="tours" className="w-full">
-          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 mb-8">
+          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-4 mb-8">
             <TabsTrigger value="tours">Tour Packages</TabsTrigger>
+            <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
@@ -322,6 +338,88 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           Delete
                         </Button>
                       </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="payments">
+            <h2 className="text-2xl font-semibold mb-6">Payment Transactions ({payments?.length || 0})</h2>
+
+            {!payments || payments.length === 0 ? (
+              <Alert>
+                <AlertDescription>
+                  No payment transactions yet. Payments will appear here once customers start booking tours.
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <div className="space-y-4">
+                {[...payments].reverse().map((payment) => (
+                  <Card key={payment.id}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-lg">{payment.tourTitle}</CardTitle>
+                          <CardDescription>
+                            {new Date(payment.timestamp).toLocaleString()}
+                          </CardDescription>
+                        </div>
+                        <Badge
+                          variant={
+                            payment.status === 'completed'
+                              ? 'default'
+                              : payment.status === 'pending'
+                              ? 'secondary'
+                              : 'destructive'
+                          }
+                          className="flex items-center gap-1"
+                        >
+                          {payment.status === 'completed' && <CheckCircle weight="fill" className="w-3 h-3" />}
+                          {payment.status === 'pending' && <Clock weight="fill" className="w-3 h-3" />}
+                          {payment.status === 'failed' && <XCircle weight="fill" className="w-3 h-3" />}
+                          {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Amount</p>
+                          <p className="font-semibold text-lg">${payment.amount}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Payment Method</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {payment.paymentMethod === 'card' ? (
+                              <>
+                                <CreditCard className="w-4 h-4" />
+                                <span className="font-medium">Credit Card</span>
+                              </>
+                            ) : (
+                              <>
+                                <DeviceMobile className="w-4 h-4" />
+                                <span className="font-medium">M-Pesa</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Customer Email</p>
+                          <p className="font-medium text-sm">{payment.customerEmail}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Phone Number</p>
+                          <p className="font-medium text-sm">{payment.customerPhone}</p>
+                        </div>
+                      </div>
+                      {payment.transactionId && (
+                        <div className="mt-4 pt-4 border-t">
+                          <p className="text-sm text-muted-foreground">Transaction ID</p>
+                          <p className="font-mono text-xs mt-1">{payment.transactionId}</p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

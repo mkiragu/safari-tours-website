@@ -1,14 +1,18 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useKV } from '@github/spark/hooks'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { toast } from 'sonner'
-import { CreditCard, DeviceMobile, CheckCircle } from '@phosphor-icons/react'
+import { CreditCard, DeviceMobile, CheckCircle, Warning } from '@phosphor-icons/react'
 import type { TourPackage } from '@/lib/types'
+import { getStripeService, type StripePaymentData } from '@/lib/stripe'
+import { getMpesaService, type MpesaPaymentData } from '@/lib/mpesa'
 
 interface PaymentDialogProps {
   open: boolean
@@ -31,54 +35,165 @@ interface MpesaPaymentForm {
   fullName: string
 }
 
+interface PaymentTransaction {
+  id: string
+  tourId: string
+  tourTitle: string
+  amount: number
+  paymentMethod: 'card' | 'mpesa'
+  status: 'pending' | 'completed' | 'failed'
+  transactionId?: string
+  customerEmail: string
+  customerPhone: string
+  timestamp: number
+}
+
 export function PaymentDialog({ open, onOpenChange, tour }: PaymentDialogProps) {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'mpesa'>('card')
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null)
+  const [transactions, setTransactions] = useKV<PaymentTransaction[]>('payment-transactions', [])
 
   const cardForm = useForm<CardPaymentForm>()
   const mpesaForm = useForm<MpesaPaymentForm>()
 
   if (!tour) return null
 
+  const saveTransaction = (transaction: PaymentTransaction) => {
+    setTransactions((current) => [...(current || []), transaction])
+  }
+
   const handleCardPayment = async (data: CardPaymentForm) => {
     setIsProcessing(true)
+    setPaymentError(null)
     
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log('Processing card payment:', { ...data, tour: tour.title })
-    
-    setPaymentSuccess(true)
-    toast.success('Payment successful! You will receive a confirmation email shortly.')
-    
-    setTimeout(() => {
+    try {
+      const stripeService = getStripeService()
+      
+      const paymentData: StripePaymentData = {
+        amount: tour.price,
+        currency: 'usd',
+        cardNumber: data.cardNumber,
+        cardName: data.cardName,
+        expiryDate: data.expiryDate,
+        cvv: data.cvv,
+        email: data.email,
+        description: `Booking: ${tour.title}`
+      }
+
+      const result = await stripeService.confirmCardPayment(paymentData)
+
+      if (result.success) {
+        const transaction: PaymentTransaction = {
+          id: `txn_${Date.now()}`,
+          tourId: tour.id,
+          tourTitle: tour.title,
+          amount: tour.price,
+          paymentMethod: 'card',
+          status: 'completed',
+          transactionId: result.transactionId,
+          customerEmail: data.email,
+          customerPhone: data.phone,
+          timestamp: Date.now()
+        }
+
+        saveTransaction(transaction)
+        setPaymentSuccess(true)
+        toast.success('Payment successful! You will receive a confirmation email shortly.')
+        
+        setTimeout(() => {
+          setIsProcessing(false)
+          setPaymentSuccess(false)
+          cardForm.reset()
+          onOpenChange(false)
+        }, 2500)
+      } else {
+        setPaymentError(result.message)
+        toast.error(result.message)
+        setIsProcessing(false)
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Payment processing failed'
+      setPaymentError(errorMessage)
+      toast.error(errorMessage)
       setIsProcessing(false)
-      setPaymentSuccess(false)
-      cardForm.reset()
-      onOpenChange(false)
-    }, 2000)
+    }
   }
 
   const handleMpesaPayment = async (data: MpesaPaymentForm) => {
     setIsProcessing(true)
+    setPaymentError(null)
     
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log('Processing M-Pesa payment:', { ...data, tour: tour.title })
-    
-    toast.success('M-Pesa prompt sent! Please complete the payment on your phone.')
-    
-    setTimeout(() => {
-      setPaymentSuccess(true)
-      toast.success('Payment confirmed! You will receive a confirmation email shortly.')
+    try {
+      const mpesaService = getMpesaService()
       
-      setTimeout(() => {
+      const paymentData: MpesaPaymentData = {
+        phoneNumber: data.phoneNumber,
+        amount: tour.price,
+        accountReference: `TOUR-${tour.id}`,
+        transactionDesc: `Booking for ${tour.title}`
+      }
+
+      const result = await mpesaService.initiateSTKPush(paymentData)
+
+      if (result.success) {
+        setCheckoutRequestId(result.checkoutRequestId || null)
+        toast.success('M-Pesa prompt sent! Please check your phone and enter your M-Pesa PIN.')
+        
+        const transaction: PaymentTransaction = {
+          id: `txn_${Date.now()}`,
+          tourId: tour.id,
+          tourTitle: tour.title,
+          amount: tour.price,
+          paymentMethod: 'mpesa',
+          status: 'pending',
+          transactionId: result.checkoutRequestId,
+          customerEmail: data.email,
+          customerPhone: data.phoneNumber,
+          timestamp: Date.now()
+        }
+
+        saveTransaction(transaction)
+
+        setTimeout(async () => {
+          if (result.checkoutRequestId) {
+            const statusResult = await mpesaService.querySTKPushStatus(result.checkoutRequestId)
+            
+            if (statusResult.status === 'completed') {
+              setPaymentSuccess(true)
+              toast.success('Payment confirmed! You will receive a confirmation email shortly.')
+              
+              setTimeout(() => {
+                setIsProcessing(false)
+                setPaymentSuccess(false)
+                mpesaForm.reset()
+                onOpenChange(false)
+              }, 2500)
+            } else if (statusResult.status === 'failed') {
+              setPaymentError(statusResult.message)
+              toast.error(statusResult.message)
+              setIsProcessing(false)
+            } else {
+              toast.info('Payment is still pending. We will notify you once completed.')
+              setIsProcessing(false)
+              mpesaForm.reset()
+              onOpenChange(false)
+            }
+          }
+        }, 30000)
+      } else {
+        setPaymentError(result.message)
+        toast.error(result.message)
         setIsProcessing(false)
-        setPaymentSuccess(false)
-        mpesaForm.reset()
-        onOpenChange(false)
-      }, 2000)
-    }, 3000)
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'M-Pesa payment failed'
+      setPaymentError(errorMessage)
+      toast.error(errorMessage)
+      setIsProcessing(false)
+    }
   }
 
   const formatCardNumber = (value: string) => {
@@ -123,6 +238,13 @@ export function PaymentDialog({ open, onOpenChange, tour }: PaymentDialogProps) 
                 <span className="text-2xl font-bold text-primary">${tour.price}</span>
               </div>
             </div>
+
+            {paymentError && (
+              <Alert variant="destructive">
+                <Warning className="h-4 w-4" />
+                <AlertDescription>{paymentError}</AlertDescription>
+              </Alert>
+            )}
 
             <Separator />
 

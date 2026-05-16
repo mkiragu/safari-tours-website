@@ -68,12 +68,19 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - Progression: Login → Dashboard → Testimonials tab → Add/Edit testimonials → Fill form (name, location, rating, comment, tour, date, verification) → Save → Update display
 - Success criteria: All CRUD operations work correctly; verified badge toggles properly; changes immediately reflect on public site; form validation prevents invalid data
 
+**Payment Transactions Viewer (Admin)**
+- Functionality: View all payment transactions with details including status, amount, payment method, customer info, and transaction IDs
+- Purpose: Enables admin to track and reconcile all payments
+- Trigger: Admin accesses dashboard and switches to Payments tab
+- Progression: Login → Dashboard → Payments tab → View list of transactions sorted by date → See payment status badges → Review customer and transaction details
+- Success criteria: All payments display with complete information; status badges color-coded (green for completed, yellow for pending, red for failed); transactions sorted newest first; clear display of payment method icons; transaction IDs visible for reconciliation
+
 **Direct Payment Processing**
-- Functionality: Accept credit card and M-Pesa payments directly on the website for tour bookings
-- Purpose: Streamlines the booking process and provides convenient payment options for customers
+- Functionality: Accept credit card and M-Pesa payments directly on the website using real payment gateway APIs (Stripe and Safaricom Daraja)
+- Purpose: Enables customers to complete bookings and payments seamlessly without leaving the website
 - Trigger: User clicks "Book Now" button on any tour card
-- Progression: Click Book Now → Payment dialog opens → Choose payment method (Credit Card or M-Pesa) → Fill payment details → Submit payment → Confirmation message → Email receipt
-- Success criteria: Both payment methods work correctly; form validation prevents invalid payment details; secure SSL encryption indicated; success confirmation displayed; payment information logged for admin review
+- Progression: Click Book Now → Payment dialog opens → Choose payment method (Credit Card or M-Pesa) → Fill payment details → Submit payment → API processes payment → Confirmation message → Email receipt → Transaction saved
+- Success criteria: Both payment methods work with real APIs; form validation prevents invalid payment details; secure SSL encryption indicated; success confirmation displayed; payment information logged for admin review; error handling for failed payments with user-friendly messages; transaction records stored persistently
 
 ## Edge Case Handling
 
