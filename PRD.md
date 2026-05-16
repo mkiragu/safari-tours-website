@@ -68,6 +68,13 @@ This app requires multiple views (public website, admin dashboard), authenticati
 - Progression: Login → Dashboard → Testimonials tab → Add/Edit testimonials → Fill form (name, location, rating, comment, tour, date, verification) → Save → Update display
 - Success criteria: All CRUD operations work correctly; verified badge toggles properly; changes immediately reflect on public site; form validation prevents invalid data
 
+**Photo Gallery Section**
+- Functionality: Showcases safari wildlife and landscape photography in an organized, filterable grid
+- Purpose: Provides visual inspiration and showcases the stunning wildlife and landscapes customers will experience
+- Trigger: User scrolls to gallery section or clicks Gallery in navigation
+- Progression: Navigate to section → View photo grid → Filter by category (All, Wildlife, Landscapes, Culture, Adventure) → Click photo → View full-size image with details in modal
+- Success criteria: Gallery displays in responsive grid; category filters work instantly; images load efficiently with lazy loading; modal shows full image with title, location, and description; hover effects reveal photo information
+
 **Payment Transactions Viewer (Admin)**
 - Functionality: View all payment transactions with details including status, amount, payment method, customer info, and transaction IDs
 - Purpose: Enables admin to track and reconcile all payments

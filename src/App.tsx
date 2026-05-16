@@ -6,6 +6,7 @@ import { HeroSection } from '@/components/HeroSection'
 import { TourCard } from '@/components/TourCard'
 import { PackagesSection } from '@/components/PackagesSection'
 import { VehiclesSection } from '@/components/VehiclesSection'
+import { GallerySection } from '@/components/GallerySection'
 import { AboutSection } from '@/components/AboutSection'
 import { TestimonialsSection } from '@/components/TestimonialsSection'
 import { ContactForm } from '@/components/ContactForm'
@@ -103,6 +104,8 @@ function App() {
         <PackagesSection />
 
         <VehiclesSection onInquire={handleVehicleInquire} />
+
+        <GallerySection />
 
         <TestimonialsSection />
 

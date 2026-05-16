@@ -40,3 +40,12 @@ export interface Testimonial {
   avatar?: string
   verified: boolean
 }
+
+export interface GalleryImage {
+  id: string
+  url: string
+  title: string
+  category: 'wildlife' | 'landscape' | 'culture' | 'adventure'
+  location?: string
+  description?: string
+}
